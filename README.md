@@ -1,10 +1,10 @@
 # ServiceProvider
 C++ Dependency Injection Model
 
-This C++ Service Provider project is designed to be as compatible as possible with the C# Service Provider interface, making it easy to use.
+This C++ Service Provider seamlessly integrates into your C++ projects, bringing the convenience of dependency injection to your development toolkit. It's intentionally designed to mirror the familiar C# Service Provider interface, ensuring a smooth transition for developers.
 
 ## IService
-C++ doesn't have the grand superclass, so every interfaces to be injected should inherit **IService** class.
+All interfaces intended for injection must inherit from the `IService` class, establishing a common ground for dependency management.
 
 ```c++
 class IHelloworld : public virtual IService {
@@ -14,7 +14,7 @@ public:
 ```
 
 ## Implements
-C++ doesn't provider function to confirm inheritance, so every implement class should declare **Implements({InterfaceClass})**.
+C++ doesn't offer built-in inheritance confirmation, so implement classes must explicitly declare their inheritance using the `Implements` macro.
 
 ```c++
 class ConsoleHelloworld : public IHelloworld {
@@ -26,7 +26,7 @@ public:
 ```
 
 ## Register Dependency
-You can register dependencies with ServiceCollection.
+Register your dependencies with the `ServiceCollection` object, creating a blueprint for the provider.
 
 ``` c++
 auto* collection = new ServiceCollection;
@@ -34,7 +34,7 @@ auto* collection = new ServiceCollection;
 collection->AddTransient<ConsoleHelloworld>();
 ```
 
-and then, build provider from collection.
+Build the ServiceProvider from the ServiceCollection.
 
 ``` c++
 auto* provider = collection->Build();
@@ -49,7 +49,7 @@ auto services = provider->GetServiceList<IHelloworld>();
 
 ## Instance Life Cycle
 ### Transient
-Instance will be created on every request.
+Instances are created a new for each request, ensuring independence and isolation.
 
 ```c++
 const auto helloworld1 = provider->GetService<IHelloworld>();
@@ -61,7 +61,7 @@ std::cout << helloworld2.get() << std::endl;
 ```
 
 ### Scoped
-Instance will be created if requested instance in advanced is not deleted.
+Instances persist within a defined scope, promoting efficiency and consistency within a specific context.
 
 ```c++
 {
@@ -82,7 +82,7 @@ Instance will be created if requested instance in advanced is not deleted.
 ```
 
 ### Singleton
-Instance will be created on first request.
+A single instance is created for the application's lifetime, guaranteeing global accessibility and shared state.
 
 ```c++
 const auto helloworld = provider->GetService<IHelloworld>();
